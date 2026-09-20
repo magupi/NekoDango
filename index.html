@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>経営の仕組みを知ろう!ねこねこ団子屋さん </title>
+
+    <!-- かわいいフォント読み込み -->
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500&display=swap" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Zen Maru Gothic', sans-serif;
+        background-color: #fdfdf8;
+        margin: 0;
+        padding: 0;
+    }
+
+
+    /* 線 */
+    .thin-line {
+        border: none;
+        border-top: 3px solid #d2ef8e;
+        margin: 25px 0 10px;
+    }
+
+    .thin-line2 {
+        border: none;
+        border-top: 1px solid #b6cf7c;
+        margin: 25px 0 10px;
+    }
+
+    /* タイトル */
+    .big-title {
+        font-size: 40px;
+        line-height: 1.4;
+        text-align: center;
+        color: #97cc41;
+        font-family: 'Zen Maru Gothic', sans-serif;
+    }
+
+    /* 左右レイアウト（文章＋画像） */
+    .text-and-image {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px;
+    }
+
+    .left-text {
+        width: 50%;
+        font-size: 23px;
+        line-height: 1.6;
+        color: #4b7f93;
+        text-align: center;
+    }
+
+    .image-box {
+        width: 50%;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .image-box img {
+        width: 550px;
+        border-radius: 50px; 
+    }
+
+    /* 遊び方 2×2 グリッド */
+    .howto-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        margin: 30px 0;
+    }
+
+    .howto-item {
+        width: 45%;
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .howto-item img {
+        width: 450px;
+        border-radius: 10px; 
+    }
+
+    .download-btn {
+        background-color: #9cd83c;
+        color: white;
+        padding: 16px 28px;
+        border-radius: 16px;
+        font-size: 40px;
+        border: none;
+        cursor: pointer;
+        margin-top: 36px;
+        font-family: 'Zen Maru Gothic', sans-serif;
+    }
+
+    .download-btn:hover {
+        background-color: #75a338;
+    }
+
+    .deka{
+        font-size: 25px;
+    }
+
+    /* ▼ スマホ対応（画面幅 768px 以下） */
+    
+    @media screen and (max-width: 768px) {
+
+    /* 全体の余白と文字サイズ */
+    body {
+        padding: 10px;
+        font-size: 18px;
+    }
+
+    /* タイトルを少し小さく */
+    .big-title {
+        font-size: 28px;
+    }
+
+    /* 左右レイアウトを縦並びにする */
+    .text-and-image {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .left-text {
+        width: 100%;
+        font-size: 20px;
+    }
+
+    .image-box {
+        width: 100%;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .image-box img {
+        width: 100%;
+        max-width: 350px;
+        border-radius: 20px;
+    }
+
+    /* 遊び方の2×2グリッド → 1列にする */
+    .howto-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .howto-item {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .howto-item img {
+        width: 100%;
+        max-width: 350px;
+        border-radius: 10px;
+    }
+
+    /* ボタンをスマホ向けに大きく */
+    .download-btn {
+        width: 100%;
+        font-size: 28px;
+        padding: 14px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<p class="text-center font-cute text-midori big-title">
+    経営の仕組みを知ろう!<br>
+    ねこねこ団子屋さん
+</p>
+
+<hr class="thin-line">
+
+<p class="text-center font-cute text-midori big-title">はじめに</p>
+
+<div class="text-and-image">
+    <div class="left-text text-blue font-cute">
+    <p>
+        ねこねこ団子屋さんへようこそ！<br>
+        このゲームでは、団子屋さんの店員として<br>
+        1か月間のお店の経営を体験します。<br>
+        1か月の経営は、10分間 にぎゅっとつまっています。<br>
+        前半の5分間で1か月分の団子をまとめて作り、<br>
+        後半の5分間では、6秒ごとに1日が過ぎていき、<br>
+        天気や季節、イベントによって<br>
+        お客さんの数が変化します。<br>
+        この短い時間の中で、商売の楽しさだけでなく、<br>
+        お金の流れや管理の難しさも<br>
+        体験できるようになっています。<br>
+        もしよろしければ、<br>
+        あそんでいただいた感想を<br>
+        書いてくださるとうれしいです。<br>
+        <a href="nekofoom.html" target="_blank">感想はこちらから‼</a>
+    </p>
+    </div>
+    <div class="image-box">
+        <img src="スクリーンショット_9-9-2026_165730_turbowarp.org.jpeg">
+    </div>
+</div>
+
+<hr class="thin-line2">
+
+<p class="text-center font-cute text-midori big-title">play!</p>
+
+<div class="text-and-image">
+    <div class="left-text text-blue font-cute">
+        <h2>"疑似体験できる"<br>ゲームの世界へ‼</h2>
+        <p>
+            商売をするには、やらなければならないことが<br>
+            本当にたくさんあります。<br>
+            材料の仕入れ、商品の値段設定、<br>
+            毎日の売上や出費の管理、消費税などの計算も必要です。<br>
+            実際の小売業では、こうした経理作業が<br>
+            とても負担になっていて、<br>
+            人手不足のお店では、時間をかけたくても<br>
+            かけられない作業のひとつです。<br>
+            そこで、このゲームでは<br>
+            「経営の仕組み」「経理作業」「売上の分析」を短い時間<br>
+            で疑似体験できるようにしました。<br>
+            ゲームが終わると、売上・経費・利益だけでなく、<br>
+            天気・日ごとの来店客数・売れ残りなどのデータも<br>
+            自動でExcelに出力されます。<br>
+            もし本当にこんな仕組みがあったら、<br>
+            小さなお店でも経理がぐっと楽になり、<br>
+            人手不足の解消や、経営改善にもつながるはずです。<br>
+            それでは、団子屋さんの世界を体験してみましょう！<br>
+        </p>
+    </div>
+
+    <div class="image-box">
+        <img src="スクリーンショット_10-9-2026_203310_turbowarp.org.jpeg">
+    </div>
+</div>
+
+<h2 class="text-center font-cute text-midori big-title">遊び方</h2>
+
+<div class="howto-grid">
+
+    <div class="howto-item">
+        <img src="スクリーンショット_7-9-2026_17932_turbowarp.org.jpeg">
+        <p>  まず、左上の緑色の旗を押して、<br>
+            ゲームを始めてください‼<br></p>
+                    <a class="deka" href="経営の仕組みを知ろう！ねこねこ団子屋さん.html" target="_blank">ゲームはこちら‼</a></p>
+    </div>
+
+    <div class="howto-item">
+        <img src="スクリーンショット_7-9-2026_17313_turbowarp.org.jpeg">
+        <p>ゲームを始めたら、<br>
+            30日間働く場所と月を決めましょう‼<br></p>
+    </div>
+
+    <div class="howto-item">
+        <img src="スクリーンショット_20-9-2026_163424_turbowarp.org.jpeg">
+            <p>終わったら、<br>
+            「出力データ」を<br>
+            右クリックor2回ほどタップして<br>
+            ゲーム結果をダウンロードし、<br>
+            開いてコピーしておきましょう‼<br></p>
+    </div>
+
+    <div class="howto-item">
+        <img src="スクリーンショット_10-9-2026_203657_turbowarp.org.jpeg">
+        <p>「データ読み取り専用ホームページ」<br>
+            に入りましょう‼<br></p>
+            <a class="deka" href="yomikomi.html" target="_blank">専用ホームページはこちら‼</a></p>
+    </div>
+
+    <div class="howto-item">
+        <img src="スクリーンショット_20-9-2026_164346_turbowarp.org.jpeg">
+        <p>➂でコピーした結果を<br>
+            貼り付けましょう‼<br></p>
+    </div>
+
+    <div class="howto-item">
+        <img src="スクリーンショット_20-9-2026_16340_turbowarp.org.jpeg">
+        <p>Excel作成ボタン<br>
+            を押して、作成しましょう<br></p>
+    </div>
+</div>
+</body>
+</html>
