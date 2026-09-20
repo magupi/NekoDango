@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ねこねこ団子屋さんデータ読み込み</title>
+
+    <!-- フォント -->
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500&display=swap" rel="stylesheet">
+
+    <!-- SheetJS（Excel生成） -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <style>
+        .moji{
+            font-family: 'Zen Maru Gothic', sans-serif;
+            color: #3a98b4;
+            text-align: center;
+        }
+        .title{
+            font-size: 55px;
+            color: rgb(86, 164, 181);
+        }
+        .title2 {
+            border-top: 7px solid #4ea4be;
+            margin: 25px 0 10px;
+        }
+        .hajime {
+            font-size: 35px;
+        }
+        .futsumoji{
+            font-size: 20px;
+        }
+        .tsugisen{
+            border-top: 3px solid #4ea4be;
+            margin: 25px 0 10px;
+        }
+        .inputbox {
+            width: 60%;
+            height: 200px;
+            margin: 20px auto;
+            display: block;
+            font-size: 20px;
+            padding: 10px;
+            border: 2px solid #4ea4be;
+            border-radius: 10px;
+            color: #3a98b4;
+        }
+        .yomikomi-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 25px;
+            font-size: 20px;
+            color: white;
+            background-color: #4ea4be;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .yomikomi-btn:hover {
+            background-color: #368ca5;
+            transform: translateY(-3px);
+        }
+        
+        /* ▼ スマホ対応（画面幅 768px 以下） */
+        @media screen and (max-width: 768px) {
+
+        /* 全体の文字サイズを少し小さく */
+        .moji {
+            font-size: 18px;
+            padding: 0 10px;
+        }
+
+        /* タイトルをスマホ向けに縮小 */
+        .title {
+            font-size: 36px;
+        }
+
+        .hajime {
+            font-size: 26px;
+        }
+
+        .futsumoji {
+            font-size: 18px;
+        }
+
+        /* 入力欄をスマホ幅にフィット */
+        .inputbox {
+            width: 90%;
+            height: 180px;
+            font-size: 18px;
+        }
+
+        /* ボタンをスマホ向けに大きく */
+        .yomikomi-btn {
+            width: 90%;
+            font-size: 22px;
+            padding: 12px;
+        }
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="title moji">
+        ねこねこ団子屋さんの<br>
+        データ読み込み<br>
+    </h1>
+
+    <div class="title2 moji"><h2 class="hajime">はじめに</h2></div>
+
+    <div class="futsumoji moji">
+        <p>
+            ゲームで出力されたデータを貼り付けると、<br>
+            材料費・出費・利益などを自動で表示します。
+        </p>
+    </div>
+
+    <div class="tsugisen moji"><h2 class="hajime">結果を見る</h2></div>
+
+    <p class="futsumoji moji">↓下にデータを入れてください↓</p>
+
+    <textarea class="inputbox"></textarea>
+    <button id="textBtn" class="yomikomi-btn" onclick="yomikomi()">読み込む</button>
+
+    <div id="result"></div>
+
+    <!-- Excelボタン（最初は隠す） -->
+    <button id="excelBtn" class="yomikomi-btn" style="display:none;">
+        Excelシートを作る
+    </button>
+
+<script>
+/* -------------------------
+   ★ names（①〜⑦）
+------------------------- */
+const names = [
+    "作った_5色","作った_三色","作った_白","作った_みたらし","作った_あんこ","作った_草",
+    "売れた_5色","売れた_三色","売れた_白","売れた_みたらし","売れた_あんこ","売れた_草",
+    "残った_5色","残った_三色","残った_白","残った_みたらし","残った_あんこ","残った_草",
+    "地代家賃","水道光熱費","通信費","消費税","広告宣伝費","借金",
+    "人件費","法定福利費","修繕費",
+    "上新粉","砂糖","食紅","抹茶パウダー","あんこ","醤油",
+    "串","箱大","箱小",
+    "売上","費用","利益",
+    "来場客数","一番売れた団子",
+
+    /* ★ 団子ロス（5）＋材料ロス（9）＝14個 */
+    "ロス_三色","ロス_白","ロス_みたらし","ロス_あんこ団子","ロス_草",
+    "ロス_上新粉","ロス_砂糖","ロス_食紅","ロス_抹茶パウダー",
+    "ロス_あんこ","ロス_醤油","ロス_串","ロス_箱大","ロス_箱小"
+];
+
+/* -------------------------
+   ★ 表示名
+------------------------- */
+const displayNames = {
+    "作った_5色":"5色セットの作った数",
+    "作った_三色":"三色団子セットの作った数",
+    "作った_白":"白団子セットの作った数",
+    "作った_みたらし":"みたらし団子セットの作った数",
+    "作った_あんこ":"あんこ団子セットの作った数",
+    "作った_草":"草団子セットの作った数",
+
+    "売れた_5色":"5色セットの売れた数",
+    "売れた_三色":"三色団子セットの売れた数",
+    "売れた_白":"白団子セットの売れた数",
+    "売れた_みたらし":"みたらし団子セットの売れた数",
+    "売れた_あんこ":"あんこ団子セットの売れた数",
+    "売れた_草":"草団子セットの売れた数",
+
+    "残った_5色":"5色セットの売れ残り",
+    "残った_三色":"三色団子セットの売れ残り",
+    "残った_白":"白団子セットの売れ残り",
+    "残った_みたらし":"みたらし団子セットの売れ残り",
+    "残った_あんこ":"あんこ団子セットの売れ残り",
+    "残った_草":"草団子セットの売れ残り",
+
+    "地代家賃":"地代家賃",
+    "水道光熱費":"水道光熱費",
+    "通信費":"通信費",
+    "消費税":"消費税",
+    "広告宣伝費":"広告宣伝費",
+    "借金":"借金",
+    "人件費":"人件費",
+    "法定福利費":"法定福利費",
+    "修繕費":"修繕費",
+
+    "上新粉":"上新粉（材料費）",
+    "砂糖":"砂糖（材料費）",
+    "食紅":"食紅（材料費）",
+    "抹茶パウダー":"抹茶パウダー（材料費）",
+    "あんこ":"あんこ（材料費）",
+    "醤油":"醤油（材料費）",
+    "串":"串（消耗品費）",
+    "箱大":"箱[大](消耗品費)",
+    "箱小":"箱[小](消耗品費)",
+
+    "売上":"売上",
+    "費用":"費用",
+    "利益":"利益",
+
+    "来場客数":"来場客数",
+    "一番売れた団子":"一番売れた団子",
+
+
+    /* ★ ロス表示名（14個） */
+    "ロス_三色":"三色団子の製造ロス",
+    "ロス_白":"白団子の製造ロス",
+    "ロス_みたらし":"みたらし団子の製造ロス",
+    "ロス_あんこ団子":"あんこ団子の製造ロス",
+    "ロス_草":"草団子の製造ロス",
+    "ロス_上新粉":"使い切れなかった上新粉",
+    "ロス_砂糖":"使い切れなかった砂糖",
+    "ロス_食紅":"使い切れなかった食紅",
+    "ロス_抹茶パウダー":"使い切れなかった抹茶パウダー",
+    "ロス_あんこ":"使い切れなかったあんこ",
+    "ロス_醤油":"使い切れなかった醤油",
+    "ロス_串":"使い切れなかった串",
+    "ロス_箱大":"使い切れなかった箱(大)",
+    "ロス_箱小":"使い切れなかった箱(小)"
+};
+
+/* -------------------------
+   ★ 単位
+------------------------- */
+const units = {
+    "作った_5色":"セット","作った_三色":"セット","作った_白":"セット",
+    "作った_みたらし":"セット","作った_あんこ":"セット","作った_草":"セット",
+
+    "売れた_5色":"セット","売れた_三色":"セット","売れた_白":"セット",
+    "売れた_みたらし":"セット","売れた_あんこ":"セット","売れた_草":"セット",
+
+    "残った_5色":"セット","残った_三色":"セット","残った_白":"セット",
+    "残った_みたらし":"セット","残った_あんこ":"セット","残った_草":"セット",
+
+    "地代家賃":"円","水道光熱費":"円","通信費":"円","消費税":"円",
+    "広告宣伝費":"円","借金":"円","人件費":"円","法定福利費":"円","修繕費":"円",
+
+    "上新粉":"円","砂糖":"円","食紅":"円","抹茶パウダー":"円","あんこ":"円","醤油":"円",
+    "串":"円","箱大":"円","箱小":"円",
+
+    "売上":"円","費用":"円","利益":"円",
+
+    "来場客数":"人",
+
+    /* ★ ロスの単位（14個） */
+    "ロス_三色":"本","ロス_白":"本","ロス_みたらし":"本","ロス_あんこ団子":"本","ロス_草":"本",
+    "ロス_上新粉":"kg","ロス_砂糖":"kg","ロス_食紅":"kg","ロス_抹茶パウダー":"kg",
+    "ロス_あんこ":"kg","ロス_醤油":"L","ロス_串":"本","ロス_箱大":"箱","ロス_箱小":"箱"
+};
+
+/* -------------------------
+   ★ 読み込み処理
+------------------------- */
+let nums = [];
+let raw = "";
+
+function yomikomi() {
+
+    raw = document.querySelector('.inputbox').value.trim();
+    const rawArr = raw.split(",");
+
+    /* ★ 材料ロス追加により境界を 46 → 55 に変更 */
+    nums = rawArr.map((x, index) => {
+        if (index < 55) return Number(x);
+        return x;
+    });
+
+    let html = "<h2 class='moji'>結果</h2>";
+
+    /* 一番売れた団子 */
+    const bestIndex = nums[40];
+    const bestNames = ["","5色セット","三色団子セット","白団子セット","みたらし団子セット","あんこ団子セット","草団子セット","6種類とも同率一位"];
+    const bestName = bestNames[bestIndex] || "不明";
+
+    /* ①〜⑦（ロス以外） */
+    for (let i = 0; i < names.length - 14; i++) {
+        if (names[i] === "一番売れた団子") continue;
+
+        const label = displayNames[names[i]];
+        const unit = units[names[i]] || "";
+        const value = nums[i];
+
+        html += `<p class="moji">${label}：${value}${unit}</p>`;
+    }
+
+    /* 一番売れた団子 */
+    html += `<p class="moji">一番売れた団子：${bestName}</p>`;
+
+    /* ★ ロス（14個） */
+    const rosuStart = nums.length - 14;
+    const rosuNames = [
+        "ロス_三色","ロス_白","ロス_みたらし","ロス_あんこ団子","ロス_草",
+        "ロス_上新粉","ロス_砂糖","ロス_食紅","ロス_抹茶パウダー",
+        "ロス_あんこ","ロス_醤油","ロス_串","ロス_箱大","ロス_箱小"
+    ];
+
+    for (let j = 0; j < 14; j++) {
+        const label = displayNames[rosuNames[j]];
+        const unit = units[rosuNames[j]];
+        const value = nums[rosuStart + j];
+
+        html += `<p class="moji">${label}：${value}${unit}</p>`;
+    }
+
+    document.getElementById("result").innerHTML = html;
+    document.getElementById("excelBtn").style.display = "block";
+}
+
+/* -------------------------
+   ★ Excel生成（①＋②＋③）
+------------------------- */
+function makeExcel() {
+    const rosuStart = nums.length - 14;
+    const zaiStart = nums.length - 9; // 材料在庫の開始位置
+
+    /* ① 団子製造データ ＋ 材料在庫（1枚目） */
+    const dangoSheet = [
+        ["団子の種類","作った数","売れた数","売れ残り","製造ロス"],
+        ["5色セット",nums[0],nums[6],nums[12],"-"],
+        ["三色団子",nums[1],nums[7],nums[13],nums[rosuStart + 0]],
+        ["白団子",nums[2],nums[8],nums[14],nums[rosuStart + 1]],
+        ["みたらし団子",nums[3],nums[9],nums[15],nums[rosuStart + 2]],
+        ["あんこ団子",nums[4],nums[10],nums[16],nums[rosuStart + 3]],
+        ["草団子",nums[5],nums[11],nums[17],nums[rosuStart + 4]],
+
+        [], // 空行
+        ["材料名","残り在庫"],
+        ["上新粉", nums[zaiStart + 0]],
+        ["砂糖", nums[zaiStart + 1]],
+        ["食紅", nums[zaiStart + 2]],
+        ["抹茶パウダー", nums[zaiStart + 3]],
+        ["あんこ", nums[zaiStart + 4]],
+        ["醤油", nums[zaiStart + 5]],
+        ["串", nums[zaiStart + 6]],
+        ["箱大", nums[zaiStart + 7]],
+        ["箱小", nums[zaiStart + 8]],
+    ];
+
+    /* ② 経理（2枚目） */
+    const keiriSheet = [
+        ["項目","金額"],
+        ["地代家賃", nums[18]],
+        ["水道光熱費", nums[19]],
+        ["通信費", nums[20]],
+        ["消費税", nums[21]],
+        ["広告宣伝費", nums[22]],
+        ["借金", nums[23]],
+        ["人件費", nums[24]],
+        ["法定福利費", nums[25]],
+        ["修繕費", nums[26]],
+        ["上新粉", nums[27]],
+        ["砂糖", nums[28]],
+        ["食紅", nums[29]],
+        ["抹茶パウダー", nums[30]],
+        ["あんこ", nums[31]],
+        ["醤油", nums[32]],
+        ["串", nums[33]],
+        ["箱大", nums[34]],
+        ["箱小", nums[35]],
+        ["売上", nums[36]],
+        ["費用", nums[37]],
+        ["利益", nums[38]]
+    ];
+
+    /* ③ 天気（3枚目） */
+    const tenkiStart = 46;
+    const tenkiSheet = [
+        ["日付","天気","客数","売上"]
+    ];
+
+    let day = 1;
+    const rawArr = raw.split(",");
+
+    for (let i = tenkiStart; day <= 30; i += 3) {
+        tenkiSheet.push([
+            `${day}日`,
+            rawArr[i],
+            Number(rawArr[i+1]),
+            Number(rawArr[i+2])
+        ]);
+        day++;
+    }
+
+    /* Excel作成 */
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(dangoSheet), "団子製造＋材料在庫");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(keiriSheet), "経理・利益データ");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(tenkiSheet), "天気と売上");
+
+    XLSX.writeFile(wb, "団子屋データ.xlsx");
+}
+
+
+document.getElementById("excelBtn").onclick = makeExcel;
+</script>
+
+
+</body>
+</html>
