@@ -9,23 +9,11 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
     <style>
         body {
             font-family: 'Zen Maru Gothic', sans-serif;
             background-color: #fdfdf8;
             padding: 40px;
-        }
-        
-        .feedback-form input,
-        .feedback-form textarea {
-            max-width: 100%;
-        }
-
-
-        .feedback-form textarea {
-            height: 120px;
-            resize: none;   /* ユーザーが伸ばせなくなる */
         }
 
         .feedback-form {
@@ -37,93 +25,28 @@
             border-radius: 20px;
             border: 3px solid #aac766;
         }
-        
-        .feedback-form label {
-            font-size: 22px;
-            color: #4b7f93;
-        }
-        
-        .feedback-form input,
-        .feedback-form textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            border: 2px solid #bbdc6d;
-            font-size: 18px;
-            font-family: 'Zen Maru Gothic', sans-serif;
-            background-color: #fbfff3;
-        }
-        
-        .feedback-form button {
-            background-color: #79a631;
-            color: white;
-            padding: 14px 30px;
-            border-radius: 16px;
-            border: none;
-            cursor: pointer;
-            font-size: 26px;
-            margin-top: 20px;
-            font-family: 'Zen Maru Gothic', sans-serif;
-        }
-        
-        .feedback-form button:hover {
-            background-color: #75a338;
-        }
 
-        /* ▼ スマホ対応（画面幅 768px 以下） */
+        /* スマホ対応 */
         @media screen and (max-width: 768px) {
-
-        /* 余白をスマホ向けに調整 */
-        body {
-            padding: 20px;
+            body {
+                padding: 20px;
+            }
+            .feedback-form {
+                width: 100%;
+                padding: 20px;
+                border-radius: 16px;
+            }
         }
-
-        /* フォームの幅をスマホにフィット */
-        .feedback-form {
-            width: 100%;
-            padding: 20px;
-            border-radius: 16px;
-        }
-
-        /* ラベルの文字サイズを少し小さく */
-        .feedback-form label {
-            font-size: 18px;
-        }
-
-        /* 入力欄をスマホ向けに */
-        .feedback-form input,
-        .feedback-form textarea {
-            font-size: 16px;
-            padding: 10px;
-        }
-
-        /* ボタンをスマホ向けに大きく */
-        .feedback-form button {
-            width: 100%;
-            font-size: 22px;
-            padding: 12px;
-        }
-        }
-
     </style>
 </head>
 <body>
 
-    <form class="feedback-form" action="https://docs.google.com/forms/d/e/1FAIpQLSc0832ZTu5A7OC7tyXDQO39BVeju3u_z8HIwAs0tnAZBNfqmg/formResponse" method="post">
+    <div class="feedback-form">
+        <h2 style="color:#4b7f93;">ご感想フォーム🐾</h2>
 
-
-        <label>お名前（ニックネームでも可）</label><br>
-        <input type="text" name="username"><br><br>
-        
-        <label>このゲームをやって感じたこと</label><br>
-        <textarea name="feeling" rows="5"></textarea><br><br>
-
-        <label>もっと良くしたほうがいいところ</label><br>
-        <textarea name="improve" rows="5"></textarea><br><br>
-
-        <button type="submit">送信する🐾</button>
-
-    </form>
+        <!-- ★ Googleフォーム埋め込み -->
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSc0832ZTu5A7OC7tyXDQO39BVeju3u_z8HIwAs0tnAZBNfqmg/viewform?embedded=true" width="640" height="1072" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
+    </div>
 
 </body>
 </html>
