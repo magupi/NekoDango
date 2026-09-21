@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+<meta charset="UTF-8">
 <head>
     <meta charset="UTF-8">
     <title>ねこねこ団子屋さんデータ読み込み</title>
@@ -367,32 +368,40 @@ function makeExcel() {
         ["利益", nums[38]]
     ];
 
-    /* ③ 天気（3枚目） */
-    const tenkiStart = 46;
-    const tenkiSheet = [
-        ["日付","天気","客数","売上"]
-    ];
+/* ★ 数値 → 天気名に変換する関数 */
+function weatherName(code) {
+    if (code == 1) return "晴れ";
+    if (code == 2) return "曇り";
+    if (code == 3) return "雨";
+    return "不明";
+}
 
-    let day = 1;
-    const rawArr = raw.split(",");
+/* ③ 天気（3枚目） */
+const tenkiStart = 46;
+const tenkiSheet = [
+    ["日付","天気","客数","売上"]
+];
 
-    for (let i = tenkiStart; day <= 30; i += 3) {
-        tenkiSheet.push([
-            `${day}日`,
-            rawArr[i],
-            Number(rawArr[i+1]),
-            Number(rawArr[i+2])
-        ]);
-        day++;
-    }
+let day = 1;
+const rawArr = raw.split(",");
 
-    /* Excel作成 */
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(dangoSheet), "団子製造＋材料在庫");
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(keiriSheet), "経理・利益データ");
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(tenkiSheet), "天気と売上");
+for (let i = tenkiStart; day <= 30; i += 3) {
+    tenkiSheet.push([
+        `${day}日`,
+        weatherName(Number(rawArr[i])),   // ★ 数値 → 日本語に変換！
+        Number(rawArr[i+1]),
+        Number(rawArr[i+2])
+    ]);
+    day++;
+}
 
-    XLSX.writeFile(wb, "団子屋データ.xlsx");
+/* Excel作成 */
+const wb = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(dangoSheet), "団子製造＋材料在庫");
+XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(keiriSheet), "経理・利益データ");
+XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(tenkiSheet), "天気と売上");
+
+XLSX.writeFile(wb, "団子屋データ.xlsx");
 }
 
 
